@@ -1752,3 +1752,32 @@ function wireEvents() {
 }
 
 wireEvents();
+
+async function initVisitorCounter() {
+  const el = $('#visitor-count');
+  if (!el) return;
+  const storageKey = 'kml_tool_visitor_count';
+  try {
+    const res = await fetch('https://api.counterapi.dev/v1/nhatnguyen11111-kml-tool/visits/up', { cache: 'no-store' });
+    if (res.ok) {
+      const data = await res.json();
+      if (data && typeof data.count === 'number') {
+        localStorage.setItem(storageKey, String(data.count));
+        el.textContent = data.count.toLocaleString('en-US');
+        return;
+      }
+    }
+  } catch (_) {
+    // Fallback below when offline or blocked
+  }
+  try {
+    const prev = Number.parseInt(localStorage.getItem(storageKey) || '0', 10);
+    const next = (Number.isFinite(prev) ? prev : 0) + 1;
+    localStorage.setItem(storageKey, String(next));
+    el.textContent = next.toLocaleString('en-US');
+  } catch (_) {
+    el.textContent = '1';
+  }
+}
+
+initVisitorCounter();
