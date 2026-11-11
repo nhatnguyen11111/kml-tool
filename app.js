@@ -1417,12 +1417,18 @@ function serializeDocument(doc) {
   return xml;
 }
 
+function ensureKmlFileName(name) {
+  const cleaned = String(name || 'output.kml').trim().replace(/\.bak$/i, '');
+  return /\.kml$/i.test(cleaned) ? cleaned : `${cleaned}.kml`;
+}
+
 function downloadText(name, text) {
+  const safeName = ensureKmlFileName(name);
   const blob = new Blob([text], { type: 'application/vnd.google-earth.kml+xml;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  link.download = name;
+  link.download = safeName;
   link.style.display = 'none';
   document.body.appendChild(link);
   link.click();
@@ -1491,14 +1497,13 @@ function saveKml(overwrite, options = {}) {
         try { indentXml(doc.documentElement); } catch (_) { /* bỏ qua như bản gốc */ }
       }
       const output = serializeDocument(doc);
-      if (overwrite) downloadText(`${state.fileName}.bak`, state.sourceText);
-      downloadText(saveName, output);
+      const finalSaveName = ensureKmlFileName(saveName);
+      downloadText(finalSaveName, output);
       hideBusy();
-      const backupLine = overwrite ? `\n• Sao lưu an toàn: ${state.fileName}.bak` : '';
       const xyzLine = applyXyz
         ? `\n• Dịch chuyển XYZ: X ${formatSignedNumber(xyzCfg.dx)} (${xyzCfg.unit}), Y ${formatSignedNumber(xyzCfg.dy)} (${xyzCfg.unit}), Z ${formatSignedNumber(xyzCfg.dz)} mét (${shiftedVertices.toLocaleString('en-US')} đỉnh)`
         : '';
-      notify(`Đã xử lý xong file KML.\n\n• Đã XÓA: ${deletedActual.toLocaleString('en-US')} đối tượng theo thuộc tính\n• Đã chuyển đổi / cập nhật: ${totalConverted.toLocaleString('en-US')} đối tượng\n• Còn lại trong file: ${remain.toLocaleString('en-US')} đối tượng${xyzLine}\n• Tải xuống: ${saveName}${backupLine}`, 'Thành công');
+      notify(`Đã xử lý xong file KML.\n\n• Đã XÓA: ${deletedActual.toLocaleString('en-US')} đối tượng theo thuộc tính\n• Đã chuyển đổi / cập nhật: ${totalConverted.toLocaleString('en-US')} đối tượng\n• Còn lại trong file: ${remain.toLocaleString('en-US')} đối tượng${xyzLine}\n• Tải xuống: ${finalSaveName}`, 'Thành công');
       setStatus('Đã lưu file KML thành công.');
     } catch (error) {
       hideBusy();
