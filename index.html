@@ -1,0 +1,717 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chuyển Đổi Đường / Vùng &amp; Xóa Thuộc Tính KML</title>
+  <link rel="stylesheet" href="styles.css?v=11">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+        </div>
+        <div>
+          <h1>Chuyển Đổi Đường / Vùng &amp; Thuộc Tính KML</h1>
+        </div>
+      </div>
+      <div class="file-open-area">
+        <div class="file-badge" title="Tệp đang làm việc">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+          </svg>
+          <span id="file-name" class="file-name">Chưa chọn tệp</span>
+        </div>
+        <label id="open-file-btn" class="primary-button" for="file-input">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>Mở tệp KML</span>
+        </label>
+        <input id="file-input" type="file">
+      </div>
+    </header>
+
+    <label id="drop-zone" class="drop-zone" for="file-input" aria-label="Khu vực kéo thả file KML">
+      <div class="drop-hero">
+        <div class="drop-visual" aria-hidden="true">
+          <div class="drop-ring drop-ring-outer"></div>
+          <div class="drop-ring drop-ring-inner"></div>
+          <div class="drop-zone-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+          </div>
+          <span class="drop-ext-badge">.KML</span>
+        </div>
+
+        <div class="drop-copy">
+          <strong>Kéo thả tệp .kml vào đây để bắt đầu</strong>
+          <span>Hoặc nhấp vào nút bên dưới để chọn tệp KML từ máy tính của bạn</span>
+        </div>
+
+        <div class="drop-cta-btn">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="12" y1="18" x2="12" y2="12"></line>
+            <line x1="9" y1="15" x2="15" y2="15"></line>
+          </svg>
+          <span>Chọn tệp KML từ máy tính</span>
+        </div>
+      </div>
+
+      <div class="drop-features">
+        <div class="drop-feature-card">
+          <div class="drop-feature-icon is-blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 19 7 16 16 8 16 5 7 12 2"></polygon>
+            </svg>
+          </div>
+          <div class="drop-feature-text">
+            <b>Chuyển đổi Đường ↔ Vùng &amp; Mã đất</b>
+            <small>Đảo kiểu hình học, gán 28+ mã đất chuẩn Việt Nam &amp; đồng bộ màu tự động</small>
+          </div>
+        </div>
+
+        <div class="drop-feature-card">
+          <div class="drop-feature-icon is-rose">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+            </svg>
+          </div>
+          <div class="drop-feature-text">
+            <b>Lọc &amp; Xóa Đối tượng Hàng loạt</b>
+            <small>Tìm kiếm, lọc và đánh dấu xóa nhanh theo mã đất, kiểu hình học, màu hoặc số đỉnh</small>
+          </div>
+        </div>
+
+        <div class="drop-feature-card">
+          <div class="drop-feature-icon is-indigo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <line x1="12" y1="2" x2="12" y2="6"></line>
+              <line x1="12" y1="18" x2="12" y2="22"></line>
+              <line x1="2" y1="12" x2="6" y2="12"></line>
+              <line x1="18" y1="12" x2="22" y2="12"></line>
+            </svg>
+          </div>
+          <div class="drop-feature-text">
+            <b>Điều chỉnh Tọa độ X, Y, Z</b>
+            <small>Dịch chuyển Kinh độ, Vĩ độ (Mét / Độ) &amp; Độ cao Z trực tiếp kèm bảng xem trước</small>
+          </div>
+        </div>
+      </div>
+    </label>
+
+    <section id="workspace" hidden>
+      <div class="stats-row">
+        <div id="stats" class="stats">Đang chờ dữ liệu…</div>
+        <div class="status-pill">
+          <span class="status-dot"></span>
+          <div id="status" class="status">Sẵn sàng thực hiện chuyển đổi hoặc xóa đối tượng.</div>
+        </div>
+      </div>
+
+      <section class="toolbar panel">
+        <div class="toolbar-row">
+          <div class="tool-group">
+            <span class="tool-group-label">Hình học</span>
+            <button id="all-to-polygon" type="button">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 19 7 16 16 8 16 5 7 12 2"></polygon>
+              </svg>
+              <span>Tất cả → Vùng</span>
+            </button>
+            <button id="all-to-line" type="button">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 17 9 11 13 15 21 7"></polyline>
+                <circle cx="3" cy="17" r="1.5"></circle>
+                <circle cx="21" cy="7" r="1.5"></circle>
+              </svg>
+              <span>Tất cả → Đường</span>
+            </button>
+            <button id="toggle-all-geometry" type="button">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="17 1 21 5 17 9"></polyline>
+                <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                <polyline points="7 23 3 19 7 15"></polyline>
+                <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+              </svg>
+              <span>Đảo kiểu (Đường ↔ Vùng)</span>
+            </button>
+          </div>
+
+          <span class="separator"></span>
+
+          <div class="tool-group">
+            <span class="tool-group-label">Khóa nhóm</span>
+            <button id="unlock-all" type="button">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
+              </svg>
+              <span>Mở khóa</span>
+            </button>
+            <button id="lock-all" type="button">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <span>Khóa tất cả</span>
+            </button>
+          </div>
+
+          <span class="separator"></span>
+
+          <div class="tool-group">
+            <label class="tool-group-label" for="batch-land-type">Gán mã đất chung</label>
+            <div class="input-action-group">
+              <div class="combo-wrap">
+                <input id="batch-land-type" type="text" value="ONT" autocomplete="off">
+                <button type="button" class="combo-toggle" data-combo-for="batch-land-type" tabindex="-1" aria-label="Hiện tất cả mã đất">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+              </div>
+              <button id="apply-batch-land-type" type="button">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span>Áp dụng</span>
+              </button>
+            </div>
+          </div>
+
+          <span class="separator"></span>
+
+          <div class="tool-group">
+            <span class="tool-group-label">Tọa độ</span>
+            <button id="jump-xyz-tab" type="button">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <line x1="12" y1="2" x2="12" y2="6"></line>
+                <line x1="12" y1="18" x2="12" y2="22"></line>
+                <line x1="2" y1="12" x2="6" y2="12"></line>
+                <line x1="18" y1="12" x2="22" y2="12"></line>
+              </svg>
+              <span>Điều chỉnh Tọa độ XYZ</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="toolbar-row">
+          <div class="tool-group">
+            <span class="tool-group-label">Lọc &amp; Xóa</span>
+            <button id="open-filter" type="button">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+              </svg>
+              <span>Bộ lọc xóa thuộc tính…</span>
+            </button>
+          </div>
+
+          <span class="separator"></span>
+
+          <div class="tool-group">
+            <label class="tool-group-label" for="quick-delete-land-type">Xóa theo mã đất</label>
+            <div class="input-action-group">
+              <select id="quick-delete-land-type"></select>
+              <button id="quick-delete" type="button" class="btn-danger-soft">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+                <span>Xóa mã này</span>
+              </button>
+            </div>
+          </div>
+
+          <span class="separator"></span>
+
+          <div class="tool-group">
+            <button id="delete-all-lines" type="button" class="btn-danger-soft">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
+              </svg>
+              <span>Xóa hết Đường</span>
+            </button>
+            <button id="delete-all-polygons" type="button" class="btn-danger-soft">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
+              </svg>
+              <span>Xóa hết Vùng</span>
+            </button>
+          </div>
+
+          <span class="separator"></span>
+
+          <div class="tool-group">
+            <button id="clear-delete" type="button" class="btn-restore">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                <polyline points="3 3 3 8 8 8"></polyline>
+              </svg>
+              <span>Hủy đánh dấu xóa</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <div class="workspace-card">
+        <nav class="tabs" role="tablist">
+          <button class="tab active" data-tab="groups" role="tab" aria-selected="true" type="button">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+              <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+            </svg>
+            <span>Cấu hình theo Nhóm</span>
+            <span class="tab-badge">Khuyên dùng</span>
+          </button>
+          <button class="tab" data-tab="details" role="tab" aria-selected="false" type="button">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="8" y1="6" x2="21" y2="6"></line>
+              <line x1="8" y1="12" x2="21" y2="12"></line>
+              <line x1="8" y1="18" x2="21" y2="18"></line>
+              <line x1="3" y1="6" x2="3.01" y2="6"></line>
+              <line x1="3" y1="12" x2="3.01" y2="12"></line>
+              <line x1="3" y1="18" x2="3.01" y2="18"></line>
+            </svg>
+            <span>Danh sách Chi tiết Đối tượng</span>
+          </button>
+          <button class="tab" data-tab="xyz" role="tab" aria-selected="false" type="button">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <line x1="12" y1="2" x2="12" y2="6"></line>
+              <line x1="12" y1="18" x2="12" y2="22"></line>
+              <line x1="2" y1="12" x2="6" y2="12"></line>
+              <line x1="18" y1="12" x2="22" y2="12"></line>
+            </svg>
+            <span>Điều chỉnh Tọa độ XYZ</span>
+            <span id="xyz-tab-badge" class="tab-badge xyz-badge" hidden>Đang bật</span>
+          </button>
+        </nav>
+
+        <section id="tab-groups" class="tab-panel active" role="tabpanel">
+          <div class="table-scroll group-scroll">
+            <table class="group-table">
+              <thead>
+                <tr>
+                  <th>STT &amp; Kiểu gốc</th>
+                  <th>Số lượng</th>
+                  <th>Màu gốc</th>
+                  <th>Loại đất gốc</th>
+                  <th>Khóa</th>
+                  <th>Xóa</th>
+                  <th>Kiểu mới (Chuyển đổi)</th>
+                  <th>Mã loại đất mới</th>
+                  <th>Màu mới &amp; Chọn</th>
+                </tr>
+              </thead>
+              <tbody id="group-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="tab-details" class="tab-panel" role="tabpanel" hidden>
+          <div class="detail-toolbar">
+            <div class="search-box">
+              <svg class="icon search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input id="detail-search" type="search" placeholder="Tìm theo tên, kiểu, mã đất, màu…">
+            </div>
+            <button id="detail-search-button" type="button">Tìm kiếm</button>
+            <button id="detail-show-all" type="button">Hiện tất cả</button>
+            <span class="separator"></span>
+            <button id="mark-selected" type="button" class="btn-danger-soft">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
+              </svg>
+              <span>Xóa dòng chọn</span>
+            </button>
+            <button id="unmark-selected" type="button" class="btn-restore">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                <polyline points="3 3 3 8 8 8"></polyline>
+              </svg>
+              <span>Bỏ xóa dòng chọn</span>
+            </button>
+            <button id="delete-search-results" type="button" class="btn-danger-soft">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
+              </svg>
+              <span>Xóa theo kết quả tìm</span>
+            </button>
+            <span class="hint">Mẹo: Nhấp chuột phải vào dòng để mở thao tác nhanh</span>
+          </div>
+          <div class="table-scroll detail-scroll">
+            <table class="detail-table">
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Tên Placemark</th>
+                  <th>Kiểu hình học</th>
+                  <th>Mã màu</th>
+                  <th>Loại đất</th>
+                  <th>Số đỉnh</th>
+                  <th>Trạng thái</th>
+                </tr>
+              </thead>
+              <tbody id="detail-body"></tbody>
+            </table>
+          </div>
+          <div id="detail-limit" class="table-note"></div>
+        </section>
+
+        <section id="tab-xyz" class="tab-panel" role="tabpanel" hidden>
+          <div class="xyz-header-bar">
+            <div class="xyz-file-summary">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+              </svg>
+              <span>Đang chỉnh trực tiếp tệp: <strong id="xyz-current-file">—</strong></span>
+              <span class="xyz-dot">·</span>
+              <span>Đối tượng giữ lại: <strong id="xyz-object-count">0</strong></span>
+              <span class="xyz-dot">·</span>
+              <span>Tổng đỉnh tọa độ: <strong id="xyz-vertex-count">0</strong></span>
+            </div>
+            <div class="xyz-header-controls">
+              <label class="xyz-switch" for="xyz-enabled">
+                <input id="xyz-enabled" type="checkbox">
+                <span>Áp dụng dịch chuyển XYZ khi Lưu file</span>
+              </label>
+              <button id="xyz-preset-default" type="button" title="Khôi phục bộ số mặc định X=-2, Y=1, Z=-2">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                  <polyline points="3 3 3 8 8 8"></polyline>
+                </svg>
+                <span>Mẫu mặc định (-2, 1, -2)</span>
+              </button>
+              <button id="xyz-reset-zero" type="button" title="Đặt X=0, Y=0, Z=0">
+                <span>Đặt về 0</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="xyz-grid">
+            <div class="xyz-card xyz-config-card">
+              <div class="xyz-card-header">
+                <h3>Cấu hình dịch chuyển Tọa độ (X, Y, Z)</h3>
+                <p>Tự động dịch chuyển mọi thẻ <code>&lt;coordinates&gt;</code> trong tệp KML đã mở</p>
+              </div>
+
+              <div class="xyz-field-group">
+                <span class="xyz-field-label">1. Đơn vị dịch chuyển X, Y (<code>DON_VI_XY</code>)</span>
+                <div class="xyz-unit-grid">
+                  <label class="xyz-unit-card">
+                    <input type="radio" name="xyz-unit" value="met" checked>
+                    <div class="xyz-unit-content">
+                      <strong>Mét (met)</strong>
+                      <small>Quy đổi theo bán kính Trái Đất R = 6.378.137 m</small>
+                    </div>
+                  </label>
+                  <label class="xyz-unit-card">
+                    <input type="radio" name="xyz-unit" value="do">
+                    <div class="xyz-unit-content">
+                      <strong>Độ thập phân (do)</strong>
+                      <small>Cộng trực tiếp vào Kinh độ / Vĩ độ WGS84</small>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              <div class="xyz-axes-list">
+                <div class="xyz-axis-row">
+                  <div class="xyz-axis-info">
+                    <div class="xyz-axis-title">
+                      <span class="axis-tag axis-x">Trục X</span>
+                      <label for="xyz-dx">Kinh độ (<code>DICH_X</code>)</label>
+                    </div>
+                    <div class="xyz-axis-meta">
+                      <span class="xyz-axis-hint"><strong>+</strong> Đông · <strong>-</strong> Tây</span>
+                      <span id="xyz-dx-desc" class="xyz-direction-pill">Tây 2 mét</span>
+                    </div>
+                  </div>
+                  <div class="xyz-input-wrap">
+                    <input id="xyz-dx" type="number" step="any" value="-2">
+                    <span class="xyz-unit-pill xyz-xy-unit">mét</span>
+                  </div>
+                </div>
+
+                <div class="xyz-axis-row">
+                  <div class="xyz-axis-info">
+                    <div class="xyz-axis-title">
+                      <span class="axis-tag axis-y">Trục Y</span>
+                      <label for="xyz-dy">Vĩ độ (<code>DICH_Y</code>)</label>
+                    </div>
+                    <div class="xyz-axis-meta">
+                      <span class="xyz-axis-hint"><strong>+</strong> Bắc · <strong>-</strong> Nam</span>
+                      <span id="xyz-dy-desc" class="xyz-direction-pill">Bắc 1 mét</span>
+                    </div>
+                  </div>
+                  <div class="xyz-input-wrap">
+                    <input id="xyz-dy" type="number" step="any" value="1">
+                    <span class="xyz-unit-pill xyz-xy-unit">mét</span>
+                  </div>
+                </div>
+
+                <div class="xyz-axis-row">
+                  <div class="xyz-axis-info">
+                    <div class="xyz-axis-title">
+                      <span class="axis-tag axis-z">Trục Z</span>
+                      <label for="xyz-dz">Độ cao (<code>DICH_Z</code>)</label>
+                    </div>
+                    <div class="xyz-axis-meta">
+                      <span class="xyz-axis-hint"><strong>+</strong> Lên · <strong>-</strong> Xuống</span>
+                      <span id="xyz-dz-desc" class="xyz-direction-pill">Xuống 2 mét</span>
+                    </div>
+                  </div>
+                  <div class="xyz-input-wrap">
+                    <input id="xyz-dz" type="number" step="any" value="-2">
+                    <span class="xyz-unit-pill">mét</span>
+                  </div>
+                </div>
+              </div>
+
+              <div id="xyz-apply-banner" class="xyz-apply-banner" hidden></div>
+
+              <div class="xyz-card-actions">
+                <button id="xyz-apply-session" type="button" class="primary-button">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span>Áp dụng XYZ vào phiên làm việc</span>
+                </button>
+                <button id="xyz-export-now" type="button" class="save-button">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                  </svg>
+                  <span id="xyz-export-label">Tải xuống chinh_XYZ_...</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="xyz-card xyz-preview-card">
+              <div class="xyz-card-header">
+                <h3>Tóm tắt &amp; Xem trước Tọa độ trực tiếp</h3>
+                <p>Đối chiếu tọa độ gốc và tọa độ sau dịch chuyển ngay trên tệp đang mở</p>
+              </div>
+
+              <div class="xyz-summary-strip">
+                <div class="xyz-stat-box">
+                  <span class="xyz-stat-label">Kinh độ (X)</span>
+                  <strong id="xyz-sum-x">-2 (met)</strong>
+                </div>
+                <div class="xyz-stat-box">
+                  <span class="xyz-stat-label">Vĩ độ (Y)</span>
+                  <strong id="xyz-sum-y">+1 (met)</strong>
+                </div>
+                <div class="xyz-stat-box">
+                  <span class="xyz-stat-label">Độ cao (Z)</span>
+                  <strong id="xyz-sum-z">-2 mét</strong>
+                </div>
+              </div>
+
+              <div class="table-scroll xyz-preview-scroll">
+                <table class="xyz-preview-table">
+                  <thead>
+                    <tr>
+                      <th>STT</th>
+                      <th>Tên Placemark</th>
+                      <th>Kiểu</th>
+                      <th>Tọa độ gốc (Đỉnh đầu)</th>
+                      <th>Tọa độ sau chỉnh XYZ</th>
+                    </tr>
+                  </thead>
+                  <tbody id="xyz-preview-body"></tbody>
+                </table>
+              </div>
+              <div id="xyz-preview-note" class="table-note"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <footer class="bottom-bar">
+        <div class="bottom-bar-note">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+          <span>Mỗi lần lưu đều xử lý trên dữ liệu gốc, cho phép tinh chỉnh và xuất lại nhiều lần.</span>
+        </div>
+        <div class="bottom-bar-actions">
+          <button id="close-file" type="button">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+            <span>Đóng tệp</span>
+          </button>
+          <button id="save-as" type="button" class="save-button">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="12" y1="18" x2="12" y2="12"></line>
+              <line x1="9" y1="15" x2="15" y2="15"></line>
+            </svg>
+            <span>Lưu thành tệp KML mới…</span>
+          </button>
+          <button id="save-overwrite" type="button" class="save-button">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+              <polyline points="17 21 17 13 7 13 7 21"></polyline>
+              <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
+            <span>Áp dụng &amp; Ghi đè file KML</span>
+          </button>
+        </div>
+      </footer>
+    </section>
+  </main>
+
+  <datalist id="land-type-options"></datalist>
+  <datalist id="filter-land-options"></datalist>
+  <datalist id="filter-color-options"></datalist>
+  <div id="context-menu" class="context-menu" hidden></div>
+
+  <dialog id="filter-dialog" class="modal">
+    <form method="dialog" id="filter-form">
+      <header class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+            </svg>
+          </div>
+          <div>
+            <h2>Bộ Lọc Xóa Đối Tượng Theo Thuộc Tính</h2>
+            <p>Kết hợp một hoặc nhiều điều kiện bên dưới để lọc và đánh dấu xóa hàng loạt</p>
+          </div>
+        </div>
+        <button type="button" class="icon-button" id="close-filter" aria-label="Đóng">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </header>
+      <div class="filter-fields">
+        <label for="filter-geometry">1. Kiểu hình học</label>
+        <select id="filter-geometry">
+          <option>(Tất cả kiểu)</option>
+          <option>Polygon (Vùng)</option>
+          <option>LineString (Đường)</option>
+          <option>Point (Điểm)</option>
+        </select>
+        <label for="filter-land-type">2. Mã loại đất (landType)</label>
+        <div class="combo-wrap combo-full">
+          <input id="filter-land-type" type="text" value="(Tất cả loại đất)" autocomplete="off">
+          <button type="button" class="combo-toggle" data-combo-for="filter-land-type" tabindex="-1" aria-label="Hiện danh sách mã đất">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+        </div>
+        <label for="filter-color">3. Mã màu sắc (Color)</label>
+        <div class="combo-wrap combo-full">
+          <input id="filter-color" type="text" value="(Tất cả màu)" autocomplete="off">
+          <button type="button" class="combo-toggle" data-combo-for="filter-color" tabindex="-1" aria-label="Hiện danh sách màu">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+        </div>
+        <label for="filter-name">4. Tên đối tượng chứa</label>
+        <input id="filter-name" type="text" placeholder="Nhập từ khóa tên Placemark…">
+        <label for="filter-points-op">5. Số lượng đỉnh tọa độ</label>
+        <div class="points-filter">
+          <select id="filter-points-op">
+            <option>(Không lọc số đỉnh)</option>
+            <option>&lt;= (Nhỏ hơn hoặc bằng)</option>
+            <option>&gt;= (Lớn hơn hoặc bằng)</option>
+            <option>= (Bằng)</option>
+          </select>
+          <input id="filter-points-value" type="number" min="0" value="2">
+        </div>
+      </div>
+      <div id="filter-matched" class="filter-matched"></div>
+      <footer class="modal-actions">
+        <button type="button" id="filter-mark" class="danger-button">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
+          </svg>
+          <span>Đánh dấu XÓA đối tượng lọc</span>
+        </button>
+        <button type="button" id="filter-unmark" class="btn-restore">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+            <polyline points="3 3 3 8 8 8"></polyline>
+          </svg>
+          <span>Bỏ đánh dấu XÓA</span>
+        </button>
+        <button type="button" id="close-filter-bottom">Đóng</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <dialog id="notify-dialog" class="modal notify-modal">
+    <div class="notify-shell">
+      <header class="modal-header notify-header">
+        <div class="modal-title-group">
+          <div id="notify-icon" class="modal-icon notify-icon is-success"></div>
+          <div>
+            <h2 id="notify-title">Thông báo</h2>
+            <p id="notify-subtitle">Chi tiết trạng thái xử lý dữ liệu KML</p>
+          </div>
+        </div>
+        <button type="button" class="icon-button" id="close-notify" aria-label="Đóng">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </header>
+      <div id="notify-body" class="notify-body"></div>
+      <footer class="modal-actions notify-actions">
+        <button type="button" id="notify-ok" class="primary-button">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>Đã hiểu</span>
+        </button>
+      </footer>
+    </div>
+  </dialog>
+
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <div id="busy" class="busy" hidden>
+    <div class="busy-card">
+      <div class="spinner"></div>
+      <span id="busy-text">Đang xử lý dữ liệu…</span>
+    </div>
+  </div>
+
+  <script src="app.js?v=11"></script>
+</body>
+</html>
